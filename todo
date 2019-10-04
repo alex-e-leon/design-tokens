@@ -1,9 +1,5 @@
-split keys on camelCasing + numbers
-support different casing on outputs (snake case, etc)
-support different output formats
-Figure out js output (object, flat?)
-  Figure out object structure for turning into components (neutrals, etc)
-
 Write readme
-add proper tests
 finish package.json
+
+Support Theming tokens as well
+  (import a theme and apply it to the original object)

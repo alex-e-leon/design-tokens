@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test/index.js"
+    "test": "ava"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "change-case": "^3.1.0",
     "self-referenced-object": "^1.1.0"
+  },
+  "devDependencies": {
+    "ava": "^2.4.0"
   }
 }

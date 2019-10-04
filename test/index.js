@@ -1,43 +1,189 @@
-const buildTokens = require('../index.js');
-const border = require ('./border.js');
-const breakpoint= require ('./breakpoint.js');
-const color = require ('./color.js');
-const page = require ('./page.js');
-const shadow = require ('./shadow.js');
-const space = require ('./space.js');
-const text = require ('./text.js');
-const zIndex = require ('./zIndex.js');
+const test = require('ava');
 
-const tokens = {
-  border,
-  breakpoint,
-  color,
-  page,
-  shadow,
-  space,
-  text,
-  zIndex,
+const buildTokens = require('../index.js');
+
+const simpleTokens = {
+  a: {
+    b: 'a',
+  }
 };
 
-const output = buildTokens({
-  namespace: 'ace',
-  cssDelimiter: 'dash-case',
-  jsDelimiter: 'camelCase',
-  scssDelmiter: 'snake_case',
-  tokens,
-});
+test(
+  'supports unnested tokens',
+  t => {
+    t.deepEqual(buildTokens({ tokens: {
+      a: 'a',
+    }}).toJs(), {
+      a: 'a',
+    });
+  }
+);
 
-console.log(output);
+test(
+  'supports deeply nested tokens',
+  t => {
+    t.deepEqual(buildTokens({ tokens: {
+      a: { b: { c: { d: { e: 'a' } } } }
+    }}).toJs(), {
+      aBCDE: 'a',
+    });
+  }
+);
 
-// tokens.toSCSS();
-// tokens.toCSS();
-// tokens.toJS();
+test(
+  'supports self referencing objects',
+  t => {
+    t.deepEqual(buildTokens({ tokens: {
+      a: 'a',
+      b: 'b',
+      c: {
+        d: 'd',  
+      },
+      ab: '${this.a}${this.b}',
+      d: '${this.c.d}',
+    }}).toJs(), {
+      a: 'a',
+      b: 'b',
+      cD: 'd',
+      ab: 'ab',
+      d: 'd',
+    });
+  }
+);
 
-// // better to use HOC style api?
-// tokens.buildColors(ColorComponent);
-// tokens.buildType(TypeComponent);
+test(
+  'exports js tokens',
+  t => {
+    t.deepEqual(buildTokens({ tokens: {
+      a: 'a',
+    }}).toJs(), {
+      a: 'a',
+    });
+  }
+);
 
-// Make sure that there is an api for "default"
-//
-//
-// Support Theming tokens as well
+test(
+  'exports scss tokens',
+  t => {
+    t.deepEqual(buildTokens({ tokens: {
+      a: 'a',
+    }}).toScss(), {
+      ['$a']: 'a',
+    });
+  }
+);
+
+test(
+  'exports css tokens',
+  t => {
+    t.deepEqual(buildTokens({ tokens: {
+      a: 'a',
+    }}).toCss(), {
+      ['--a']: 'a',
+    });
+  }
+);
+
+test(
+  'supports camelCase',
+  t => {
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'camelCase',
+      tokens: simpleTokens,
+    }).toJs(), {
+      aB: 'a',
+    });
+  }
+);
+
+test(
+  'supports snake_case',
+  t => {
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'snake_case',
+      tokens: simpleTokens,
+    }).toJs(), {
+      ['a_b']: 'a',
+    });
+  }
+);
+
+test(
+  'supports dash-case',
+  t => {
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'dash-case',
+      tokens: simpleTokens,
+    }).toJs(), {
+      ['a-b']: 'a',
+    });
+  }
+);
+
+test(
+  'supports PascalCase',
+  t => {
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'PascalCase',
+      tokens: simpleTokens,
+    }).toJs(), {
+      ['AB']: 'a',
+    });
+  }
+);
+
+test(
+  'supports converting camelCased tokens',
+  t => {
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'snake_case',
+      tokens: {
+        camelCased: {
+          myToken: 'a',
+        },
+      },
+    }).toJs(), {
+      ['camel_cased_my_token']: 'a',
+    });
+  }
+);
+
+test(
+  'supports converting camelCased tokens with numbers',
+  t => {
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'snake_case',
+      tokens: {
+        camelCase: {
+          400: 'a',
+        },
+      },
+    }).toJs(), {
+      ['camel_case_400']: 'a',
+    });
+
+    t.deepEqual(buildTokens({
+      jsDelimiter: 'camelCase',
+      tokens: {
+        camelCase: {
+          400: 'a',
+        },
+      },
+    }).toJs(), {
+      ['camelCase400']: 'a',
+    });
+  }
+);
+
+test(
+  'supports namespace',
+  t => {
+    t.deepEqual(buildTokens({
+      namespace: 'space',
+      jsDelimiter: 'snake_case',
+      tokens: simpleTokens,
+    }).toJs(), {
+      space_a_b: 'a',
+    });
+  }
+);
