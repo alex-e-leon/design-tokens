@@ -88,7 +88,7 @@ test(
   'supports camelCase',
   t => {
     t.deepEqual(buildTokens({
-      jsDelimiter: 'camelCase',
+      jsCasing: 'camelCase',
       tokens: simpleTokens,
     }).toJs(), {
       aB: 'a',
@@ -100,7 +100,7 @@ test(
   'supports snake_case',
   t => {
     t.deepEqual(buildTokens({
-      jsDelimiter: 'snake_case',
+      jsCasing: 'snake_case',
       tokens: simpleTokens,
     }).toJs(), {
       ['a_b']: 'a',
@@ -112,7 +112,7 @@ test(
   'supports dash-case',
   t => {
     t.deepEqual(buildTokens({
-      jsDelimiter: 'dash-case',
+      jsCasing: 'dash-case',
       tokens: simpleTokens,
     }).toJs(), {
       ['a-b']: 'a',
@@ -124,7 +124,7 @@ test(
   'supports PascalCase',
   t => {
     t.deepEqual(buildTokens({
-      jsDelimiter: 'PascalCase',
+      jsCasing: 'PascalCase',
       tokens: simpleTokens,
     }).toJs(), {
       ['AB']: 'a',
@@ -136,7 +136,7 @@ test(
   'supports converting camelCased tokens',
   t => {
     t.deepEqual(buildTokens({
-      jsDelimiter: 'snake_case',
+      jsCasing: 'snake_case',
       tokens: {
         camelCased: {
           myToken: 'a',
@@ -152,7 +152,7 @@ test(
   'supports converting camelCased tokens with numbers',
   t => {
     t.deepEqual(buildTokens({
-      jsDelimiter: 'snake_case',
+      jsCasing: 'snake_case',
       tokens: {
         camelCase: {
           400: 'a',
@@ -163,7 +163,7 @@ test(
     });
 
     t.deepEqual(buildTokens({
-      jsDelimiter: 'camelCase',
+      jsCasing: 'camelCase',
       tokens: {
         camelCase: {
           400: 'a',
@@ -180,7 +180,7 @@ test(
   t => {
     t.deepEqual(buildTokens({
       namespace: 'space',
-      jsDelimiter: 'snake_case',
+      jsCasing: 'snake_case',
       tokens: simpleTokens,
     }).toJs(), {
       space_a_b: 'a',

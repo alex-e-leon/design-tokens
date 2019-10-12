@@ -8,7 +8,7 @@ const program = require('commander');
 let entryFile;
 
 program
-  .description('Build design tokens for multiple languages from a taft config file')
+  .description('Build design tokens for multiple languages from a design-token-factory config file')
   .arguments('<entryFile>')
   .action(function (input) {
     // allows us to require paths without leading `./`
@@ -24,7 +24,7 @@ program
   .parse(process.argv);
 
 if (!entryFile || !(program.js || program.css || program.scss)) {
-  console.log('an entry file and an output file are required');
+  console.log('An entry file and an output file are required');
   program.outputHelp();
   process.exit(0);
 }

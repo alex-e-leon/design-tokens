@@ -37,20 +37,17 @@ const concatTokenObject = (object, namespace) => {
   return tokens;
 };
 
-const changeObjectCase = (object, _caseName, _prefix) => {
-  const caseName = _caseName ? _caseName : 'camelCase';
-  const prefix = _prefix ? _prefix : '';
-
+const changeObjectCase = (object, caseName = 'camelCase', prefix = '') => {
   return Object.entries(object).reduce((acc, [key, value]) => {
     acc[prefix + cases[caseName](key)] = value;
     return acc;
   }, {});
 };
 
-const buildTokenVariation = (tokenObject, namespace, delimiter, prefix) => {
+const buildTokenVariation = (tokenObject, namespace, casing, prefix) => {
   return changeObjectCase(
     concatTokenObject(tokenObject, namespace),
-    delimiter,
+    casing,
     prefix,
   );
 }
@@ -62,15 +59,15 @@ const buildTokens = (options) => {
   const tokens = {};
 
   tokens.toJs = () => {
-    return buildTokenVariation(tokenObject, options.namespace, options.jsDelimiter, '');
+    return buildTokenVariation(tokenObject, options.namespace, options.jsCasing, '');
   }
 
   tokens.toScss = () => {
-    return buildTokenVariation(tokenObject, options.namespace, options.scssDelimiter, '$');
+    return buildTokenVariation(tokenObject, options.namespace, options.scssCasing, '$');
   }
 
   tokens.toCss = () => {
-    return buildTokenVariation(tokenObject, options.namespace, options.cssDelimiter, '--');
+    return buildTokenVariation(tokenObject, options.namespace, options.cssCasing, '--');
   }
 
   return tokens;
