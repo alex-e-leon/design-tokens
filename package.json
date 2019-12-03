@@ -1,6 +1,6 @@
 {
   "name": "design-tokens",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple configuration for defining, maintaining and building design tokens.",
   "main": "index.js",
   "bin": { "generate-tokens": "cli.js" },
