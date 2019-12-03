@@ -1,14 +1,14 @@
 {
-  "name": "design-token-factory",
+  "name": "design-tokens",
   "version": "1.0.0",
   "description": "Simple configuration for defining, maintaining and building design tokens.",
   "main": "index.js",
-  "bin": { "dtf": "cli.js" },
+  "bin": { "generate-tokens": "cli.js" },
   "scripts": {
     "test": "ava"
   },
   "author": "alex leon <alex@leon.st>",
-  "repository": "alex-e-leon/design-token-factory",
+  "repository": "alex-e-leon/design-tokens",
   "license": "ISC",
   "dependencies": {
     "change-case": "^3.1.0",
@@ -19,10 +19,8 @@
     "ava": "^2.4.0"
   },
   "keywords": [
-    "design token factory",
     "design tokens",
     "design system",
-    "factory",
     "config",
     "builder",
     "design",

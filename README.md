@@ -1,8 +1,8 @@
-# design-token-factory
+# design-tokens
 
 Simple configuration for defining, maintaining and building design tokens.
 
-## Why you might want to use design-token-factory
+## Why you might want to use design-tokens
 
 Design tokens are a great way to manage basic design rules for digital projects, but defining and maintaining them can be tedious and error prone, and using them across multiple languages (js + css for example) can be difficult.
 
@@ -10,13 +10,13 @@ design-tokens makes all of this easy, as it allows you to define your tokens in 
 
 ## So what does it look like?
 
-`npm i -D design-token-factory`
+`npm i -D design-tokens`
 
 ```js
 // design-token-config.js
 
 export default {
-  namespace: 'dtf',
+  namespace: 'dt',
   jsCasing: 'camelCase',
   scssCasing: 'dashCase',
   cssCasing: 'dashCase',
@@ -34,10 +34,13 @@ export default {
 
 ```
 ### CLI
-```
-Usage: cli [options] <entryFile>
 
-Build design tokens for multiple languages from a design-token-factory config file
+The cli gives you an easy way to build out design tokens in different output formats from the same base values such as in CI/CD pipelines.
+
+```
+Usage: generate-tokens [options] <entryFile>
+
+Build design tokens for multiple languages from a design-token config file
 
 Options:
   --js <outputFile>    Build js tokens
@@ -46,15 +49,12 @@ Options:
   -h, --help           output usage information
 ```
 
-`dtf design-token-config.js --js design-tokens.js --scss design-tokens.scss --css design-tokens.css`
-
-The cli gives you an easy way to build out design tokens in different output formats from the same base values such as in CI/CD pipelines.
-
+Example usage: `generate-tokens design-token-config.js --js design-tokens.js --scss design-tokens.scss --css design-tokens.css`
 
 ### JS
 
 ```js
-import buildTokens from 'design-token-factory';
+import buildTokens from 'design-tokens';
 import tokenConfig from './design-token-config';
 
 const tokens = buildTokens(tokenConfig);
@@ -75,9 +75,44 @@ Token config options
 
 ### Token config
 
+The token config has a few features to support managing your design tokens.
+
+#### Nesting
+
 design-tokens allows you to define your tokens in a flat or nested format to help categorise your tokens. In the future, the design-tokens library will also provide components to help document common types of design tokens, such as color, spacing, typography, and organising your design tokens in a nested format will make it easy to automatically document different types of design tokens.
 
-design-tokens also transforms camelCased object key names, so if you'd like to define your tokens in a flat format, `myColorToken` will be transformed to `my-color-token` if you choose to export your tokens with dash-case.
+design-tokens will generate token names by concatenating all the nested categories together. For example:
+
+```
+tokens: {
+  color: {
+    primary: {
+      500: '#xxx',
+      600: '#xxx',
+    },
+    neutral: {
+      500: '${this.color.primary.500}',
+      600: '${this.color.primary.600}',
+    }
+  },
+},
+```
+
+Would generate
+
+```
+colorPrimary500: '#xxx',
+colorPrimary600: '#xxx',
+colorNeutral500: '#xxx',
+colorNeutral600: '#xxx',
+
+```
+
+#### Casing
+
+design-tokens supports different casing outputs. As you've just seen if you nest objects design-tokens will treat the different 
+transforms camelCased object key names, so if you'd like to define your tokens in a flat format, `myColorToken` will be transformed to `my-color-token` if you choose to export your tokens with dash-case.
+
 
 design-tokens also allows you to use the values of tokens that you've already defined in the config file. It uses the [self-referenced-object](https://github.com/alex-e-leon/self-referenced-object) under the hood. This allows you to define tokens that reference each other for example:
 
@@ -134,4 +169,4 @@ console.log(tokens.toCss());
 
 ## Contributions
 
-If you'd like design-token-factory to support any other output formats - or for that matter any other features, please create an issue (or better yet a contribution). Pull requests welcome :)
+If you'd like design-tokens to support any other output formats - or any other features, please create an issue. Pull requests also welcome :)

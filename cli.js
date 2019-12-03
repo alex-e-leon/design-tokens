@@ -8,7 +8,7 @@ const program = require('commander');
 let entryFile;
 
 program
-  .description('Build design tokens for multiple languages from a design-token-factory config file')
+  .description('Build design tokens for multiple languages from a design-tokens config file')
   .arguments('<entryFile>')
   .action(function (input) {
     // allows us to require paths without leading `./`
